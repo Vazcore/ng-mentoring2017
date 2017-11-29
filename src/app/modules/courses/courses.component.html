@@ -1,3 +1,25 @@
-<p>
-  courses works!
-</p>
+<div class="row form-group">
+  <div class="col-sm-5 pt-2">
+    <input type="text"
+      [(ngModel)]="keyword"
+      class="form-control"
+      placeholder="Type a name of the course" />
+  </div>
+
+  <div class="col-sm-2 pt-2">
+    <button (click)="find()" type="button" class="btn btn-primary w-100">Find</button>
+  </div>
+
+  <div class="col-sm-3 pt-2 offset-md-2">
+    <button type="button" class="btn btn-success w-100">Add Course</button>
+  </div>
+</div>
+
+<ul class="list-group w-100 pl-3 pr-3">
+  <app-course *ngFor="let course of courses"
+    [course]="course"
+    (deleteCourse)="onDelete($event)"
+    class="mb-1">
+  </app-course>
+</ul>
+
