@@ -4,13 +4,18 @@ import { CoursesComponent } from './courses.component';
 import { CourseComponent } from './course/course.component';
 import { CourseService } from './course.service';
 import { FormsModule } from '@angular/forms';
+import { SearchBarComponent } from '../../common/search-bar/search-bar.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule
   ],
-  declarations: [CoursesComponent, CourseComponent],
+  declarations: [
+    CoursesComponent,
+    CourseComponent,
+    SearchBarComponent
+  ],
   exports: [CoursesComponent],
   providers: [
     CourseService

@@ -8,8 +8,7 @@ import { Course } from './course/course.model';
   styleUrls: ['./courses.component.css']
 })
 export class CoursesComponent implements OnInit {
-  courses: Array<Course>;
-  keyword: string = '';
+  courses: Array<Course>;  
 
   constructor(private courseSrv: CourseService) {}
 
@@ -21,8 +20,8 @@ export class CoursesComponent implements OnInit {
     console.log(course);
   }
 
-  find() {
-    console.log(this.keyword);
+  find(keyword: string) {
+    console.log(keyword);
   }
 
 }
