@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-header',
@@ -11,6 +12,7 @@ export class HeaderComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    
   }
 
 }

@@ -5,6 +5,8 @@ import { CourseComponent } from './course/course.component';
 import { CourseService } from './course.service';
 import { FormsModule } from '@angular/forms';
 import { SearchBarComponent } from '../../common/search-bar/search-bar.component';
+import { ModalComponent } from '../../common/modal/modal.component';
+import { ModalService } from '../../common/modal/modal.service';
 
 @NgModule({
   imports: [
@@ -14,11 +16,13 @@ import { SearchBarComponent } from '../../common/search-bar/search-bar.component
   declarations: [
     CoursesComponent,
     CourseComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    ModalComponent
   ],
   exports: [CoursesComponent],
   providers: [
-    CourseService
+    CourseService,
+    ModalService
   ]
 })
 export class CoursesModule { }
