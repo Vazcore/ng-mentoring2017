@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchBarComponent } from './search-bar/search-bar.component';
+import { 
+  ModalComponent,
+  ModalService } from './modal/index';
 
 @NgModule({
   imports: [
@@ -9,10 +12,15 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
     FormsModule
   ],
   declarations: [
-    SearchBarComponent
+    SearchBarComponent,
+    ModalComponent
   ],
   exports: [
-    SearchBarComponent
+    SearchBarComponent,
+    ModalComponent
+  ],
+  providers: [
+    ModalService
   ]
 })
 export class SharedModule { }

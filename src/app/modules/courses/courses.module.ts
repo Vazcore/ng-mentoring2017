@@ -6,8 +6,6 @@ import {
   CourseService
 } from './index';
 import { SharedModule } from '../../common/shared.module';
-import { ModalComponent } from '../../common/modal/modal.component';
-import { ModalService } from '../../common/modal/modal.service';
 
 @NgModule({
   imports: [
@@ -16,13 +14,11 @@ import { ModalService } from '../../common/modal/modal.service';
   ],
   declarations: [
     CoursesComponent,
-    CourseComponent,
-    ModalComponent
+    CourseComponent
   ],
   exports: [CoursesComponent],
   providers: [
-    CourseService,
-    ModalService
+    CourseService
   ]
 })
 export class CoursesModule { }
