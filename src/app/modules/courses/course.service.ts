@@ -35,4 +35,32 @@ export class CourseService {
     return this.courses;
   }
 
+  createCourse(
+    course: Course
+  ): boolean {
+    let {id, title, description, date, duration} = course;
+    this.courses.push(
+      new Course(
+        id, title, description, date, duration
+      )
+    );
+
+    return true;
+  }
+
+  getCourseById(id: number): Course|null {
+    let filtered = this.courses.filter(course => course.id === id);
+    return filtered.length ? filtered[0] : null;
+  }
+
+  updateCourse(course: Course): boolean {
+    // todo 
+    return true;
+  }
+
+  removeCourse(id: number):boolean {
+    // todo 
+    return true;
+  }
+
 }

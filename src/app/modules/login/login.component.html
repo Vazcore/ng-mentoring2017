@@ -1,9 +1,10 @@
 <div class="float-right">
-  <p>
-    User Login
+  <p *ngIf="isLogin === false" (click)="login()">
+    Login
+    
   </p>
 
-  <p>
+  <p *ngIf="isLogin === true" (click)="logout()">
     Logout
   </p>
 </div>

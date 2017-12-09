@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { CoursesModule } from './modules/courses/courses.module';
 import { HeaderModule } from './modules/header/header.module';
 import { FooterModule } from './modules/footer/footer.module';
+import { LoginModule } from './modules/login/login.module';
+import { ProfileModule } from './modules/profile/profile.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { FooterModule } from './modules/footer/footer.module';
     BrowserModule,
     CoursesModule,
     HeaderModule,
-    FooterModule
+    FooterModule,
+    LoginModule,
+    ProfileModule
   ],
   providers: [],
   bootstrap: [AppComponent]
