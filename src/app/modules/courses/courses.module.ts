@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CoursesComponent } from './courses.component';
-import { CourseComponent } from './course/course.component';
-import { CourseService } from './course.service';
-import { FormsModule } from '@angular/forms';
-import { SearchBarComponent } from '../../common/search-bar/search-bar.component';
+import { 
+  CoursesComponent,
+  CourseComponent,
+  CourseService
+} from './index';
+import { SharedModule } from '../../common/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    SharedModule
   ],
   declarations: [
     CoursesComponent,
-    CourseComponent,
-    SearchBarComponent
+    CourseComponent
   ],
   exports: [CoursesComponent],
   providers: [
