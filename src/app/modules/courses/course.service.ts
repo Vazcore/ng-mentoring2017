@@ -11,22 +11,23 @@ export class CourseService {
         id: 1,
         title: 'Statistics with R',
         description: 'Master Statistics with R. Statistical mastery of data analysis including inference, modeling, and Bayesian approaches.',
-        date: new Date(2016, 4, 1),
-        duration: 300
+        date: new Date(2018, 4, 1),
+        duration: 30
       },
       {
         id: 2,
         title: 'Excel to MySQL: Analytic Techniques for Business Specialization',
         description: 'Turn Data Into Value. Drive business process change by identifying & analyzing key metrics in 4 industry-relevant courses.',
-        date: new Date(2017, 5, 10),
-        duration: 6000
+        date: new Date(2017, 11, 14),
+        duration: 60,
+        topRated: true
       },
       {
         id: 3,
         title: 'Applied Data Science with Python',
         description: 'Gain new insights into your data . Learn to apply data science methods and techniques, and acquire analysis skills.',
         date: new Date(2017, 10, 3),
-        duration: 5000
+        duration: 50
       }
     ];
   }

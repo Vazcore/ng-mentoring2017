@@ -5,6 +5,8 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
 import { 
   ModalComponent,
   ModalService } from './modal/index';
+import { BorderColorDirective } from './border-color/border-color.directive';
+import { DatesService } from './dates/dates.service';
 
 @NgModule({
   imports: [
@@ -13,11 +15,13 @@ import {
   ],
   declarations: [
     SearchBarComponent,
-    ModalComponent
+    ModalComponent,
+    BorderColorDirective
   ],
   exports: [
     SearchBarComponent,
-    ModalComponent
+    ModalComponent,
+    BorderColorDirective
   ]
 })
 export class SharedModule {
@@ -25,7 +29,8 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        ModalService
+        ModalService,
+        DatesService
       ]
     };
   }
