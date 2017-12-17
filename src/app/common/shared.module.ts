@@ -7,6 +7,9 @@ import {
   ModalService } from './modal/index';
 import { BorderColorDirective } from './border-color/border-color.directive';
 import { DatesService } from './dates/dates.service';
+import { DurationPipe } from './dates/duration.pipe';
+import { OrderByPipe } from './order/order-by.pipe';
+import { FilterByPipe } from './filter/filter-by.pipe';
 
 @NgModule({
   imports: [
@@ -16,12 +19,18 @@ import { DatesService } from './dates/dates.service';
   declarations: [
     SearchBarComponent,
     ModalComponent,
-    BorderColorDirective
+    BorderColorDirective,
+    DurationPipe,
+    OrderByPipe,
+    FilterByPipe
   ],
   exports: [
     SearchBarComponent,
     ModalComponent,
-    BorderColorDirective
+    BorderColorDirective,
+    DurationPipe,
+    OrderByPipe,
+    FilterByPipe
   ]
 })
 export class SharedModule {

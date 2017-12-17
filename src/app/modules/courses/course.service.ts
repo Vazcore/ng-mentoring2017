@@ -19,7 +19,7 @@ export class CourseService {
         title: 'Excel to MySQL: Analytic Techniques for Business Specialization',
         description: 'Turn Data Into Value. Drive business process change by identifying & analyzing key metrics in 4 industry-relevant courses.',
         date: new Date(2017, 11, 14),
-        duration: 60,
+        duration: 75,
         topRated: true
       },
       {
@@ -27,7 +27,7 @@ export class CourseService {
         title: 'Applied Data Science with Python',
         description: 'Gain new insights into your data . Learn to apply data science methods and techniques, and acquire analysis skills.',
         date: new Date(2017, 10, 3),
-        duration: 50
+        duration: 55
       }
     ];
   }
@@ -62,6 +62,10 @@ export class CourseService {
   removeCourse(id: number):boolean {
     // todo 
     return true;
+  }
+
+  copyCourses(courses: Course[]): Course[] {
+    return courses.map(el => el);
   }
 
 }
