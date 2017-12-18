@@ -1,0 +1,16 @@
+<div class="modal-wrapper" (click)="onClick($event)">
+  <div class="modal">
+    <div class="modal-body">
+      <div type="button"
+        (click)="close()"
+        class="close-button"
+        aria-label="Close Modal">
+          <img tabindex="0" class="close-button" src="assets/svg/x.svg" alt="Close Icon">
+      </div>
+      
+      <ng-content></ng-content>
+    </div>
+  </div>
+  <div class="modal-background"></div>
+</div>
+
