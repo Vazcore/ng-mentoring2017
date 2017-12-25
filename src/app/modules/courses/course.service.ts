@@ -60,7 +60,9 @@ export class CourseService {
   }
 
   removeCourse(id: number):boolean {
-    // todo 
+    this.courses = this.courses.filter(el => {
+      return el.id !== id;
+    }); 
     return true;
   }
 

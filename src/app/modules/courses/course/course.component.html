@@ -1,4 +1,4 @@
-<li appBorderColor [borderColor]="borderColor"
+<li appBorderColor [borderColor]="courseStatus"
   class="list-group-item row d-flex align-items-center">
   <div class="col-xs-12 col-sm-9">
     <strong>{{ course.title | uppercase }},</strong>
@@ -17,12 +17,4 @@
     <button type="button" class="btn btn-primary w-100 mb-2">Edit course</button>
     <button type="button" class="btn btn-danger w-100" (click)="onAskToDelete(course)">Delete</button>
   </div>
-
-  <app-modal id="{{course.id}}">
-    <h4>Do you really want to delete this course?</h4>
-    <div class="modal-controlls">
-      <button type="button" class="btn btn-success" (click)="onDelete(course);">Yes</button>
-      <button type="button" class="btn btn-danger" (click)="onCancelDelete(course.id);">No</button>
-    </div>
-  </app-modal>
 </li>

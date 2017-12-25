@@ -12,7 +12,8 @@
   class="list-group w-100 pl-3 pr-3">
   <app-course *ngFor="let course of courses | orderBy : 'date'"
     [course]="course"
-    (deleteCourse)="onDelete($event)"
+    [courseStatus]="getCourseStatus(course)"
+    (deleteCourse)="onAskToDelete($event)"
     class="mb-1">
   </app-course>
 </ul>
@@ -22,4 +23,16 @@
     No data. Feel free to add new course.
   </h5>
 </ng-template>
+
+<app-modal id="{{courseModalId}}">
+  <h4>Do you really want to delete this course?</h4>
+  <div class="modal-controlls">
+    <button type="button"
+      class="btn btn-success"
+      (click)="onDelete(preDeletedCourse);">Yes</button>
+    <button type="button"
+      class="btn btn-danger"
+      (click)="onCancelDelete(preDeletedCourse.id);">No</button>
+  </div>
+</app-modal>
 
