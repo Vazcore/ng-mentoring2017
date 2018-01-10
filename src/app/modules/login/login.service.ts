@@ -1,44 +1,64 @@
 import { Injectable } from '@angular/core';
 import { Profile, ACTIVE_USER } from '../profile/profile.model';
 import { AppLocalStorage } from '../../common/storage/localStorage';
-import { EventEmitter } from '@angular/core';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class LoginService {
   
-  public loginStatus$: EventEmitter<boolean> = new EventEmitter<boolean>(); 
+  public loginStatus$: ReplaySubject<boolean>;
+  private activeUser: Profile|null = null;
 
-  constructor() { }
+  constructor() {
+    this.loginStatus$ = new ReplaySubject<boolean>();
+  }
 
-  getLoginStatus(): EventEmitter<boolean> {
+  getLoginStatus(): ReplaySubject<boolean> {
     return this.loginStatus$;
   }
 
   login(username: string, password: string): Profile {
-    let profile = new Profile(
-      1, "user1", "pass1", "User1"
-    );
+    let profile = null;
+    try {
+      profile = new Profile(1, "user1", "pass1", "Aliaksei");  
+    } catch (error) {
+      this.loginStatus$.next(false);  
+    }
+    
+    this.activeUser = profile;
     AppLocalStorage.setItem(ACTIVE_USER, profile);
-    this.loginStatus$.emit(true);
+    this.loginStatus$.next(true);
     return profile;
   }
 
   logout(): boolean {
     AppLocalStorage.removeItem(ACTIVE_USER);
-    this.loginStatus$.emit(false);
+    this.activeUser = null;
+    this.loginStatus$.next(false);
     return true;
   }
 
-  private _getActiveProfileData(): object|string|false {
-    return AppLocalStorage.getItem(ACTIVE_USER);
+  private _getActiveProfileData(): Profile|null {
+    const profile = <Profile>AppLocalStorage.getItem(ACTIVE_USER);
+    try {
+      this.activeUser = new Profile(profile.id, profile.login, profile.password, profile.name); 
+    } catch (error) {
+      this.activeUser = null;
+    }
+    return this.activeUser;
   }
 
   isLogin(): boolean {
-    return this._getActiveProfileData() !== null;
+    const isLogin =  this.getActiveProfile() !== null;
+    this.loginStatus$.next(isLogin);
+    return isLogin;
   }
 
-  getActiveProfile():Profile|false {
-    let profileData = this._getActiveProfileData();
-    return (profileData instanceof Profile) ? profileData : false; 
+  getActiveProfile():Profile|null {
+    if (this.activeUser !== null ) {
+      return this.activeUser;
+    } else {
+      return this._getActiveProfileData();
+    }
   }
 }
