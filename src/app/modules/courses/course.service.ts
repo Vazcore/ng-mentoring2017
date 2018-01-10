@@ -30,6 +30,14 @@ export class CourseService {
         description: 'Gain new insights into your data . Learn to apply data science methods and techniques, and acquire analysis skills.',
         date: new Date(2017, 10, 3),
         duration: 55
+      },
+      {
+        id: 3,
+        title: 'Functional Programming in Scala Specialization',
+        description: 'Discover how to write elegant code that works the first time it is run. This Specialization provides a hands-on introduction to functional programming using the widespread programming language, Scala.',
+        date: new Date(2018, 0, 10),
+        duration: 105,
+        topRated: true
       }
     ];
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CourseService } from './course.service';
-import { Course, FRESH_COLOR, UPCOMING_COLOR } from './course/course.model';
+import { Course, FRESH_COLOR, UPCOMING_COLOR, OUTDATED_COLOR } from './course/course.model';
 import { FilterByPipe } from '../../common/filter/filter-by.pipe';
 import { ModalService } from '../../common/modal/modal.service';
 import { DatesService } from '../../common/dates/dates.service';
@@ -51,18 +51,14 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
   initCourses() {
     this.getCoursesSub = this.getCourses()
-    .switchMap((courses: Course[]) => {
-      return Observable.from(courses);
+    .map((courses: Course[]) => {
+      return courses.filter((course: Course) => {
+        return this.getCourseStatus(course) !== OUTDATED_COLOR;
+      });
     })
-    .filter((course: Course): boolean => {
-      return true;
-    })
-    .map((course: Course) => {
-      return course;
-    })
-    .subscribe((courses: Course) => {
-      //this.courses = courses;
-      //this.initialCourses = this.getInitialCourses();
+    .subscribe((courses: Course[]) => {
+      this.courses = courses;
+      this.initialCourses = this.getInitialCourses();
     });
   }
 
@@ -109,12 +105,14 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
     if (courseDate > currentDate) {
       courseStatus = UPCOMING_COLOR;
-    }
+    }    
     else if (
       courseDate < currentDate 
       && courseDate >= (currentDate - twoWeeksShift)
     ) {
       courseStatus = FRESH_COLOR;
+    } else {
+      return courseStatus = OUTDATED_COLOR;
     }
     return courseStatus;
   }
