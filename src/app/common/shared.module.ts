@@ -5,6 +5,11 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
 import { 
   ModalComponent,
   ModalService } from './modal/index';
+import { BorderColorDirective } from './border-color/border-color.directive';
+import { DatesService } from './dates/dates.service';
+import { DurationPipe } from './dates/duration.pipe';
+import { OrderByPipe } from './order/order-by.pipe';
+import { FilterByPipe } from './filter/filter-by.pipe';
 
 @NgModule({
   imports: [
@@ -13,11 +18,19 @@ import {
   ],
   declarations: [
     SearchBarComponent,
-    ModalComponent
+    ModalComponent,
+    BorderColorDirective,
+    DurationPipe,
+    OrderByPipe,
+    FilterByPipe
   ],
   exports: [
     SearchBarComponent,
-    ModalComponent
+    ModalComponent,
+    BorderColorDirective,
+    DurationPipe,
+    OrderByPipe,
+    FilterByPipe
   ]
 })
 export class SharedModule {
@@ -25,7 +38,8 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        ModalService
+        ModalService,
+        DatesService
       ]
     };
   }

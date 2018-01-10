@@ -18,6 +18,11 @@ export class SearchBarComponent implements OnInit {
   ngOnInit() {
   }
 
+  clear(): void {
+    this.keyword = '';
+    this.find();
+  }
+
   find() {
     this.onFind.emit(this.keyword);
   }
