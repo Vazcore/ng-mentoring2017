@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Course } from './course/course.model';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class CourseService {
@@ -32,8 +34,8 @@ export class CourseService {
     ];
   }
 
-  getCourses(): Array<Course> {
-    return this.courses;
+  getCourses(): Observable<Course[]> {
+    return Observable.of(this.courses);
   }
 
   createCourse(
