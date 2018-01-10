@@ -5,10 +5,14 @@ import { FilterByPipe } from '../../common/filter/filter-by.pipe';
 import { ModalService } from '../../common/modal/modal.service';
 import { DatesService } from '../../common/dates/dates.service';
 import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/take';
+import 'rxjs/add/observable/from';
 
 @Component({
   selector: 'app-courses',
@@ -24,7 +28,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   courseModalId: string = 'course_modal';
   preDeletedCourse: Course;
   getCoursesSub: Subscription;
-  getCourses$: Subject<Number> = new Subject();
+  getCourses$: Subject<String> = new Subject();
 
   constructor(
     private courseSrv: CourseService,
@@ -34,20 +38,32 @@ export class CoursesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.initCourses();    
+    this.initCourses();
+    this.getCourses$.next(null);
+  }
+
+  getCourses(): Observable<Course[]> {
+    return this.getCourses$
+    .switchMap(() => {
+      return this.courseSrv.getCourses();
+    });
   }
 
   initCourses() {
-    this.getCoursesSub = this.getCourses$
-    .switchMap(() => {
-      return this.courseSrv.getCourses();
-    })    
-    .subscribe((courses: Course[]) => {
-      this.courses = courses;
-      this.initialCourses = this.getInitialCourses();
+    this.getCoursesSub = this.getCourses()
+    .switchMap((courses: Course[]) => {
+      return Observable.from(courses);
+    })
+    .filter((course: Course): boolean => {
+      return true;
+    })
+    .map((course: Course) => {
+      return course;
+    })
+    .subscribe((courses: Course) => {
+      //this.courses = courses;
+      //this.initialCourses = this.getInitialCourses();
     });
-
-    this.getCourses$.next(1);
   }
 
   ngOnDestroy() {
@@ -61,7 +77,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   onDelete(course: Course) {
     this.courseSrv.removeCourse(course.id);
     this.closeDeleteModal();
-    this.getCourses$.next(1);
+    this.getCourses$.next(null);
   }
 
   closeDeleteModal() {
