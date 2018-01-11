@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { 
   CoursesComponent,
   CourseComponent,
@@ -11,7 +12,8 @@ import { CourseFormComponent } from './course-form/course-form.component';
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ],
   declarations: [
     CoursesComponent,

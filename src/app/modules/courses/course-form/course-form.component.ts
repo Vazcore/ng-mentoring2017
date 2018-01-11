@@ -8,7 +8,7 @@ import { PageStatus } from '../course-page-status';
   styleUrls: ['./course-form.component.less']
 })
 export class CourseFormComponent implements OnInit {
-	@Input() course?: Course;
+	@Input() course: Course|{};
 	@Input() mode: string;
   @Output() changeParentStatus = new EventEmitter<number>();
 	status: string[] = [
@@ -18,6 +18,9 @@ export class CourseFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if (this.status[this.mode] === 'Add') {
+      this.course = {};
+    }
   }
 
   proccessForm(): void {

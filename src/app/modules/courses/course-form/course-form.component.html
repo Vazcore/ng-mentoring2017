@@ -5,7 +5,7 @@
 			<label class="d-inline align-middle">Title</label>
 		</div>
 		<div class="col-sm-8">
-			<input type="text" name="title" class="form-control" />
+			<input type="text" name="title" class="form-control" [(ngModel)]="course.title" />
 		</div>
 	</div>
 
@@ -14,7 +14,7 @@
 			<label class="d-inline align-middle">Description</label>
 		</div>
 		<div class="col-sm-8">
-			<textarea name="description" class="form-control"></textarea>
+			<textarea name="description" [(ngModel)]="course.description" class="form-control"></textarea>
 		</div>
 	</div>
 
@@ -23,7 +23,7 @@
 			<label class="d-inline align-middle">Date</label>
 		</div>
 		<div class="col-sm-8">
-			<app-date-input></app-date-input>
+			<app-date-input [date]="course.date"></app-date-input>
 		</div>
 	</div>
 
@@ -32,7 +32,7 @@
 			<label class="d-inline align-middle">Duration</label>
 		</div>
 		<div class="col-sm-8">
-			<app-duration-input></app-duration-input>
+			<app-duration-input [duration]="course.duration"></app-duration-input>
 		</div>
 	</div>
 

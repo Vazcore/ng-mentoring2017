@@ -29,6 +29,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   initialCourses: Array<Course>;
   courseModalId: string = 'course_modal';
   preDeletedCourse: Course;
+  editedCourse: Course;
   getCoursesSub: Subscription;
   getCourses$: Subject<String> = new Subject();
   pageStatus: PageStatus = PageStatus.VIEW_COURSES;
@@ -103,6 +104,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
     if (action.type === 'delete') {
       this.onAskToDelete(action.course);
     } else if (action.type === 'edit') {
+      this.editedCourse = action.course;
       this.setPageStatus(PageStatus.EDIT_COURSE);
     }
   }
