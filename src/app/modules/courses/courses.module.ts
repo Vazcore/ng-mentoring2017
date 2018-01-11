@@ -6,6 +6,7 @@ import {
   CourseService
 } from './index';
 import { SharedModule } from '../../common/shared.module';
+import { CourseFormComponent } from './course-form/course-form.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { SharedModule } from '../../common/shared.module';
   ],
   declarations: [
     CoursesComponent,
-    CourseComponent
+    CourseComponent,
+    CourseFormComponent
   ],
   exports: [CoursesComponent],
   providers: [

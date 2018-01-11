@@ -7,6 +7,8 @@ import { DatesService } from '../../common/dates/dates.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import { PageStatus } from './course-page-status';
+import { ModifyAction } from './course/modify-action.interface';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
@@ -29,6 +31,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   preDeletedCourse: Course;
   getCoursesSub: Subscription;
   getCourses$: Subject<String> = new Subject();
+  pageStatus: PageStatus = PageStatus.VIEW_COURSES;
 
   constructor(
     private courseSrv: CourseService,
@@ -40,6 +43,18 @@ export class CoursesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initCourses();
     this.getCourses$.next(null);
+  }
+
+  getPageStatus(status: string): number {
+    return PageStatus[status];
+  }
+
+  changePageStatus(status: string): void {
+    this.pageStatus = PageStatus[status];
+  }
+
+  setPageStatus(status: number): void {
+    this.pageStatus = status;
   }
 
   getCourses(): Observable<Course[]> {
@@ -82,6 +97,14 @@ export class CoursesComponent implements OnInit, OnDestroy {
   
   onCancelDelete(courseId: number) {
     this.closeDeleteModal();
+  }
+
+  onModifyAction(action: ModifyAction): void {
+    if (action.type === 'delete') {
+      this.onAskToDelete(action.course);
+    } else if (action.type === 'edit') {
+      this.setPageStatus(PageStatus.EDIT_COURSE);
+    }
   }
 
   onAskToDelete(course: Course) {
