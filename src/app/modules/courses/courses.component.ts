@@ -13,8 +13,8 @@ import { ModifyAction } from './course/modify-action.interface';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/take';
 import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/toArray';
 
 @Component({
   selector: 'app-courses',
@@ -58,20 +58,15 @@ export class CoursesComponent implements OnInit, OnDestroy {
     this.pageStatus = status;
   }
 
-  getCourses(): Observable<Course[]> {
-    return this.getCourses$
-    .switchMap(() => {
-      return this.courseSrv.getCourses();
-    });
-  }
-
   initCourses() {
-    this.getCoursesSub = this.getCourses()
-    .map((courses: Course[]) => {
-      return courses.filter((course: Course) => {
-        return this.getCourseStatus(course) !== OUTDATED_COLOR;
-      });
+    this.getCoursesSub = this.courseSrv.getCourses()
+    .switchMap((courses: Course[]) => {
+      return Observable.from(courses);
     })
+    .filter((course: Course): boolean => {
+      return this.getCourseStatus(course) !== OUTDATED_COLOR;
+    })
+    .toArray()
     .subscribe((courses: Course[]) => {
       this.courses = courses;
       this.initialCourses = this.getInitialCourses();
