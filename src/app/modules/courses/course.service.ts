@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Course } from './course/course.model';
 import { Observable } from 'rxjs/Observable';
+import { Paging } from './paging/paging.model';
+import { RequestsService } from '../../common/requests/requests.service';
+import { QueryParam } from '../../common/requests/query-param.interace';
 import 'rxjs/add/observable/of';
 
 @Injectable()
 export class CourseService {
   private courses: Array<Course>;
 
-  constructor() { 
+  constructor(
+    private requetsSrv: RequestsService
+  ) { 
     this.courses = [
       {
         id: 1,
@@ -42,8 +47,19 @@ export class CourseService {
     ];
   }
 
-  getCourses(): Observable<Course[]> {
-    return Observable.of(this.courses);
+  formatPaging(paging: Paging): Array<QueryParam> {
+    let params:Array<QueryParam> = [];
+    
+    for (let key in paging) {
+      params.push({param: key, value: paging[key]});
+    }
+
+    return params;
+  }
+
+  getCourses(paging: Paging): Observable<Course[]> {
+    const params: Array<QueryParam> = this.formatPaging(paging);
+    return this.requetsSrv.request('courses', 'Get', null, params);
   }
 
   createCourse(

@@ -5,7 +5,7 @@ export class Profile implements ProfileInterface {
     public id: number,
     public login: string,
     public password: string,
-    public name: string 
+    public name: {first: string, last: string} 
   ) {}
 }
 

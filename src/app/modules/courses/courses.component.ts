@@ -9,12 +9,17 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { PageStatus } from './course-page-status';
 import { ModifyAction } from './course/modify-action.interface';
+import { Paging } from './paging/paging.model';
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/toArray';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/takeLast';
 
 @Component({
   selector: 'app-courses',
@@ -32,6 +37,10 @@ export class CoursesComponent implements OnInit, OnDestroy {
   editedCourse: Course;
   getCoursesSub: Subscription;
   getCourses$: Subject<String> = new Subject();
+  paging$: Subject<Paging> = new Subject();
+  numberOfCoursesOnPage: number = 3;
+  noMoreCourses: boolean = false;
+  paging: Paging = new Paging(0, this.numberOfCoursesOnPage);  
   pageStatus: PageStatus = PageStatus.VIEW_COURSES;
 
   constructor(
@@ -59,22 +68,45 @@ export class CoursesComponent implements OnInit, OnDestroy {
   }
 
   initCourses() {
-    this.getCoursesSub = this.courseSrv.getCourses()
-    .switchMap((courses: Course[]) => {
-      return Observable.from(courses);
+    this.paging$.startWith(
+      this.paging
+    )
+    .switchMap((paging: Paging) => {
+      return this.courseSrv.getCourses(paging);
     })
-    .filter((course: Course): boolean => {
-      return this.getCourseStatus(course) !== OUTDATED_COLOR;
+    .map((courses: Course[]) => {
+      return courses.map((course: Course) => {
+        return new Course(course.id, course.title, course.description, new Date(course.date), course.duration, course.topRated);
+      })
+      .filter((course: Course) => {
+        return this.getCourseStatus(course) !== OUTDATED_COLOR;  
+      });
     })
-    .toArray()
-    .subscribe((courses: Course[]) => {
-      this.courses = courses;
+    .subscribe(this.onLoadingCourses.bind(this));
+  }
+
+  onLoadingCourses(courses: Course[]): void {
+    if (courses.length === 0) {
+      this.noMoreCourses = true;
+    } else {
+      this.courses = [...this.courses, ...courses];
       this.initialCourses = this.getInitialCourses();
-    });
+    }
   }
 
   ngOnDestroy() {
     this.getCoursesSub.unsubscribe();
+  }
+
+  nextPage():void {
+    this.paging$.next(
+      this.updatePaging(this.paging.start + this.numberOfCoursesOnPage, this.paging.count)
+    );
+  }
+
+  updatePaging(start: number, count: number): Paging {
+    this.paging = new Paging(start, count);
+    return this.paging;
   }
 
   getInitialCourses(): Array<Course> {
@@ -119,7 +151,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
   getCourseStatus(course: Course): string {
     let currentDate = this.datesService.getCurrentDate().getTime();
-    let courseDate = course.date.getTime(); 
+    let courseDate = course.date.getTime();
     let twoWeeksShift = 14 * 24 * 60 * 60 * 1000;
     let courseStatus = '';
 
