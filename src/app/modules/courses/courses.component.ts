@@ -1,9 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CourseService } from './course.service';
-import { Course, FRESH_COLOR, UPCOMING_COLOR } from './course/course.model';
+import { Course, FRESH_COLOR, UPCOMING_COLOR, OUTDATED_COLOR } from './course/course.model';
 import { FilterByPipe } from '../../common/filter/filter-by.pipe';
 import { ModalService } from '../../common/modal/modal.service';
 import { DatesService } from '../../common/dates/dates.service';
+import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { PageStatus } from './course-page-status';
+import { ModifyAction } from './course/modify-action.interface';
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/toArray';
 
 @Component({
   selector: 'app-courses',
@@ -13,11 +24,15 @@ import { DatesService } from '../../common/dates/dates.service';
     FilterByPipe
   ]
 })
-export class CoursesComponent implements OnInit {
-  courses: Array<Course>;
+export class CoursesComponent implements OnInit, OnDestroy {
+  courses: Array<Course> = [];
   initialCourses: Array<Course>;
   courseModalId: string = 'course_modal';
-  preDeletedCourse: Course; 
+  preDeletedCourse: Course;
+  editedCourse: Course;
+  getCoursesSub: Subscription;
+  getCourses$: Subject<String> = new Subject();
+  pageStatus: PageStatus = PageStatus.VIEW_COURSES;
 
   constructor(
     private courseSrv: CourseService,
@@ -27,8 +42,39 @@ export class CoursesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.courses = this.courseSrv.getCourses();
-    this.initialCourses = this.getInitialCourses();
+    this.initCourses();
+    this.getCourses$.next(null);
+  }
+
+  getPageStatus(status: string): number {
+    return PageStatus[status];
+  }
+
+  changePageStatus(status: string): void {
+    this.pageStatus = PageStatus[status];
+  }
+
+  setPageStatus(status: number): void {
+    this.pageStatus = status;
+  }
+
+  initCourses() {
+    this.getCoursesSub = this.courseSrv.getCourses()
+    .switchMap((courses: Course[]) => {
+      return Observable.from(courses);
+    })
+    .filter((course: Course): boolean => {
+      return this.getCourseStatus(course) !== OUTDATED_COLOR;
+    })
+    .toArray()
+    .subscribe((courses: Course[]) => {
+      this.courses = courses;
+      this.initialCourses = this.getInitialCourses();
+    });
+  }
+
+  ngOnDestroy() {
+    this.getCoursesSub.unsubscribe();
   }
 
   getInitialCourses(): Array<Course> {
@@ -38,9 +84,7 @@ export class CoursesComponent implements OnInit {
   onDelete(course: Course) {
     this.courseSrv.removeCourse(course.id);
     this.closeDeleteModal();
-    this.courses = this.courseSrv.getCourses();
-    this.initialCourses = this.getInitialCourses();
-    console.log(course);
+    this.getCourses$.next(null);
   }
 
   closeDeleteModal() {
@@ -49,6 +93,15 @@ export class CoursesComponent implements OnInit {
   
   onCancelDelete(courseId: number) {
     this.closeDeleteModal();
+  }
+
+  onModifyAction(action: ModifyAction): void {
+    if (action.type === 'delete') {
+      this.onAskToDelete(action.course);
+    } else if (action.type === 'edit') {
+      this.editedCourse = action.course;
+      this.setPageStatus(PageStatus.EDIT_COURSE);
+    }
   }
 
   onAskToDelete(course: Course) {
@@ -78,6 +131,8 @@ export class CoursesComponent implements OnInit {
       && courseDate >= (currentDate - twoWeeksShift)
     ) {
       courseStatus = FRESH_COLOR;
+    } else {
+      return courseStatus = OUTDATED_COLOR;
     }
     return courseStatus;
   }

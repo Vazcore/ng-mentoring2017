@@ -6,9 +6,11 @@
     
   </a>
 
-  <a *ngIf="isLogin === true"
-    (click)="logout()"
-    class="link">
-    Logout
-  </a>
+  <div *ngIf="isLogin === true">
+    <h5>Hi, {{activeUser.name}}</h5>
+    <a (click)="logout()"
+      class="link">
+      Logout
+    </a>
+  </div>
 </div>

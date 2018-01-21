@@ -1,27 +1,44 @@
-<div class="row form-group">
-  <app-search-bar
-    (onFind)="find($event)"
-    class="row col-7 pl-3"></app-search-bar>
+<div *ngIf="pageStatus === getPageStatus('VIEW_COURSES'); else modifyForm">
+  <div class="row form-group">
+    <app-search-bar
+      (onFind)="find($event)"
+      class="row col-7 pl-3"></app-search-bar>
 
-  <div class="col-sm-3 pt-2 offset-md-2">
-    <button type="button" class="btn btn-success w-100">Add Course</button>
+    <div class="col-sm-3 pt-2 offset-md-2">
+      <button type="button"
+        *ngIf="pageStatus === getPageStatus('VIEW_COURSES')"
+        (click)="changePageStatus('ADD_COURSE')"
+        class="btn btn-success w-100">Add Course</button>
+    </div>
   </div>
+
+  <!-- View Courses List -->
+
+  <ul *ngIf="courses.length; else noCourses"
+    class="list-group w-100 pl-3 pr-3">
+    <app-course *ngFor="let course of courses | orderBy : 'date'"
+      [course]="course"
+      [courseStatus]="getCourseStatus(course)"
+      (onModifyCourse)="onModifyAction($event)"
+      class="mb-1">
+    </app-course>
+  </ul>
+
+  <ng-template #noCourses>
+    <h5>
+      No data. Feel free to add new course.
+    </h5>
+  </ng-template>
+
+  <!-- END View Courses List -->
 </div>
 
-<ul *ngIf="courses.length; else noCourses"
-  class="list-group w-100 pl-3 pr-3">
-  <app-course *ngFor="let course of courses | orderBy : 'date'"
-    [course]="course"
-    [courseStatus]="getCourseStatus(course)"
-    (deleteCourse)="onAskToDelete($event)"
-    class="mb-1">
-  </app-course>
-</ul>
-
-<ng-template #noCourses>
-  <h5>
-    No data. Feel free to add new course.
-  </h5>
+<ng-template #modifyForm>
+  <!-- Add/Edit Course -->
+  <app-course-form [course]="editedCourse"
+      (changeParentStatus)="setPageStatus($event)"
+      [mode]="pageStatus"></app-course-form>
+  <!-- END Add/Edit Course -->
 </ng-template>
 
 <app-modal id="{{courseModalId}}">

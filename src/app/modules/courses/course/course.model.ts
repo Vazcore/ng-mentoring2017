@@ -15,3 +15,4 @@ export class Course implements CourseInterface {
 
 export const FRESH_COLOR = 'green';
 export const UPCOMING_COLOR = 'blue';
+export const OUTDATED_COLOR = 'gray';

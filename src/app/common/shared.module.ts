@@ -10,6 +10,8 @@ import { DatesService } from './dates/dates.service';
 import { DurationPipe } from './dates/duration.pipe';
 import { OrderByPipe } from './order/order-by.pipe';
 import { FilterByPipe } from './filter/filter-by.pipe';
+import { DateInputComponent } from './date-input/date-input.component';
+import { DurationInputComponent } from './duration-input/duration-input.component';
 
 @NgModule({
   imports: [
@@ -22,7 +24,9 @@ import { FilterByPipe } from './filter/filter-by.pipe';
     BorderColorDirective,
     DurationPipe,
     OrderByPipe,
-    FilterByPipe
+    FilterByPipe,
+    DateInputComponent,
+    DurationInputComponent
   ],
   exports: [
     SearchBarComponent,
@@ -30,7 +34,9 @@ import { FilterByPipe } from './filter/filter-by.pipe';
     BorderColorDirective,
     DurationPipe,
     OrderByPipe,
-    FilterByPipe
+    FilterByPipe,
+    DateInputComponent,
+    DurationInputComponent
   ]
 })
 export class SharedModule {

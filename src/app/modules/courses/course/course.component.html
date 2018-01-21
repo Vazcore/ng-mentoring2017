@@ -14,7 +14,11 @@
     <p>{{ course.description }}</p>
   </div>
   <div class="col-xs-12 col-sm-3">
-    <button type="button" class="btn btn-primary w-100 mb-2">Edit course</button>
-    <button type="button" class="btn btn-danger w-100" (click)="onAskToDelete(course)">Delete</button>
+    <button type="button"
+      class="btn btn-primary w-100 mb-2"
+      (click)="onEdit(course)">Edit course</button>
+    <button type="button"
+      class="btn btn-danger w-100"
+      (click)="onAskToDelete(course)">Delete</button>
   </div>
 </li>

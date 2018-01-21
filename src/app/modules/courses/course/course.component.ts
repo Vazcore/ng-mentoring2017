@@ -5,6 +5,7 @@ import { Course } from './course.model';
 import { Input } from '@angular/core';
 import { Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
+import { ModifyAction } from './modify-action.interface';
 
 @Component({
   selector: 'app-course',
@@ -15,10 +16,22 @@ import { EventEmitter } from '@angular/core';
 export class CourseComponent {
   @Input() course: Course;
   @Input() courseStatus: string;
-  @Output() deleteCourse = new EventEmitter<Course>();
+  @Output() onModifyCourse = new EventEmitter<ModifyAction>();
 
   onAskToDelete(course: Course): void {
-    this.deleteCourse.emit(course);
+    const action = {
+      type: 'delete',
+      course: course
+    };
+    this.onModifyCourse.emit(action);
+  }
+
+  onEdit(course: Course): void {
+    const action = {
+      type: 'edit',
+      course: course
+    };
+    this.onModifyCourse.emit(action);
   }
 
 }

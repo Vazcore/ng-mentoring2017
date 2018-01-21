@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Course } from './course/course.model';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
 
 @Injectable()
 export class CourseService {
@@ -28,12 +30,20 @@ export class CourseService {
         description: 'Gain new insights into your data . Learn to apply data science methods and techniques, and acquire analysis skills.',
         date: new Date(2017, 10, 3),
         duration: 55
+      },
+      {
+        id: 3,
+        title: 'Functional Programming in Scala Specialization',
+        description: 'Discover how to write elegant code that works the first time it is run. This Specialization provides a hands-on introduction to functional programming using the widespread programming language, Scala.',
+        date: new Date(2018, 0, 10),
+        duration: 105,
+        topRated: true
       }
     ];
   }
 
-  getCourses(): Array<Course> {
-    return this.courses;
+  getCourses(): Observable<Course[]> {
+    return Observable.of(this.courses);
   }
 
   createCourse(
