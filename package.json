@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "webpack-dev-server --port=3001",
+    "start_aot":"ng serve --aot",
     "start_cli": "ng serve",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
