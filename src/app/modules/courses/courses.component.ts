@@ -125,7 +125,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
     if (courseDate > currentDate) {
       courseStatus = UPCOMING_COLOR;
-    }    
+    }
     else if (
       courseDate < currentDate 
       && courseDate >= (currentDate - twoWeeksShift)
