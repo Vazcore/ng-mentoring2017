@@ -32,18 +32,6 @@ export class LoginService {
 
   login(login: string, password: string): Observable<any> {
     return this.requestSrv.request('auth/login', 'Post', {login, password});
-    
-    // let profile = null;
-    // try {
-    //   profile = new Profile(1, "user1", "pass1", "Aliaksei");  
-    // } catch (error) {
-    //   this.loginStatus$.next(false);  
-    // }
-    
-    // this.activeUser = profile;
-    // AppLocalStorage.setItem(ACTIVE_USER, profile);
-    // this.loginStatus$.next(true);
-    // return profile;
   }
 
   logout(): boolean {
@@ -54,15 +42,11 @@ export class LoginService {
   }
 
   private _getToken(): string {
-    return this.token || AppLocalStorage.getItem(ACTIVE_USER).toString();
+    return this.token || (AppLocalStorage.getItem(ACTIVE_USER) ? AppLocalStorage.getItem(ACTIVE_USER).toString() : null);
   }
 
   private _getActiveProfileData(): Observable<Profile> {
-    const token = this._getToken();
-    const header: Array<HeaderParam> = [
-      {param: 'Authorization', value: token}
-    ];
-    return this.requestSrv.request('auth/userinfo','Post', null, null, header);
+    return this.requestSrv.request('auth/userinfo','Post', null, null);
   }
 
   isLogin(): boolean {

@@ -13,7 +13,8 @@ import { FilterByPipe } from './filter/filter-by.pipe';
 import { DateInputComponent } from './date-input/date-input.component';
 import { DurationInputComponent } from './duration-input/duration-input.component';
 import { RequestsService } from './requests/requests.service';
-import { HttpModule } from '@angular/http';
+import { AuthorizedHttpService } from './requests/authorized-http.service';
+import { HttpModule, XHRBackend, RequestOptions } from '@angular/http';
 
 @NgModule({
   imports: [
@@ -47,6 +48,13 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
+        {
+          provide: AuthorizedHttpService,
+          useFactory: (backend: XHRBackend, options: RequestOptions) => {
+            return new AuthorizedHttpService(backend, options);
+          },
+          deps: [XHRBackend, RequestOptions]
+        },
         ModalService,
         DatesService,
         RequestsService

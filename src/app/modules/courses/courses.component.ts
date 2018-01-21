@@ -36,12 +36,16 @@ export class CoursesComponent implements OnInit, OnDestroy {
   preDeletedCourse: Course;
   editedCourse: Course;
   getCoursesSub: Subscription;
+  findCoursesSub: Subscription;
   getCourses$: Subject<String> = new Subject();
   paging$: Subject<Paging> = new Subject();
   numberOfCoursesOnPage: number = 3;
   noMoreCourses: boolean = false;
   paging: Paging = new Paging(0, this.numberOfCoursesOnPage);  
+  searching$: Subject<string> = new Subject();
+  displayingMode$: Subject<'FIND'|'ALL'> = new Subject();
   pageStatus: PageStatus = PageStatus.VIEW_COURSES;
+
 
   constructor(
     private courseSrv: CourseService,
@@ -52,6 +56,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initCourses();
+    this.initSearching();
     this.getCourses$.next(null);
   }
 
@@ -68,12 +73,39 @@ export class CoursesComponent implements OnInit, OnDestroy {
   }
 
   initCourses() {
-    this.paging$.startWith(
+    this.getCoursesSub = this.paging$.startWith(
       this.paging
     )
-    .switchMap((paging: Paging) => {
-      return this.courseSrv.getCourses(paging);
+    .combineLatest(this.displayingMode$.startWith('ALL'))
+    .filter((inputs: [Paging, string]): boolean => {
+      return inputs[1] === 'ALL';
     })
+    .switchMap((inputs: [Paging, string]) => {
+      return this.courseSrv.getCourses(inputs[0]);
+    })
+    .switchMap((courses: Course[]) => {
+      return this.prepareCourses(courses);
+    })
+    .subscribe(this.onLoadingCourses.bind(this));
+  }
+
+  initSearching() {
+    this.findCoursesSub = this.searching$
+    .combineLatest(this.paging$, this.displayingMode$)
+    .filter((inputs:[string,Paging,string]): boolean => {
+      return inputs[2] === 'FIND';
+    })
+    .switchMap((inputs:[string,Paging,string]) => {
+      return this.courseSrv.getCourses(inputs[1], inputs[0]);
+    })
+    .switchMap((courses: Course[]) => {
+      return this.prepareCourses(courses);
+    })
+    .subscribe(this.onLoadingCourses.bind(this));
+  }
+
+  prepareCourses(courses: Course[]): Observable<Course[]> {
+    return Observable.of(courses)
     .map((courses: Course[]) => {
       return courses.map((course: Course) => {
         return new Course(course.id, course.title, course.description, new Date(course.date), course.duration, course.topRated);
@@ -81,8 +113,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
       .filter((course: Course) => {
         return this.getCourseStatus(course) !== OUTDATED_COLOR;  
       });
-    })
-    .subscribe(this.onLoadingCourses.bind(this));
+    });
   }
 
   onLoadingCourses(courses: Course[]): void {
@@ -96,6 +127,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getCoursesSub.unsubscribe();
+    this.findCoursesSub.unsubscribe();
   }
 
   nextPage():void {
@@ -114,9 +146,12 @@ export class CoursesComponent implements OnInit, OnDestroy {
   }
 
   onDelete(course: Course) {
-    this.courseSrv.removeCourse(course.id);
-    this.closeDeleteModal();
-    this.getCourses$.next(null);
+    this.courseSrv.removeCourse(course.id)
+    .subscribe(deleted => {
+      this.closeDeleteModal();
+      this.getCourses$.next(null);
+      this.find("");
+    });
   }
 
   closeDeleteModal() {
@@ -142,11 +177,11 @@ export class CoursesComponent implements OnInit, OnDestroy {
   }
 
   find(keyword: string) {
-    this.courses = this.filterByPipe.transform<Course>(
-                  this.initialCourses,
-                  'title',
-                  keyword);
-    console.log(keyword);
+    this.courses = [];
+    this.noMoreCourses = false;
+    this.displayingMode$.next('FIND');
+    this.paging$.next(this.updatePaging(0, this.numberOfCoursesOnPage));
+    this.searching$.next(keyword);
   }
 
   getCourseStatus(course: Course): string {

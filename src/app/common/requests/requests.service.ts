@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { QueryParam } from './query-param.interace';
 import { HeaderParam } from './header-params.interface';
+import { AuthorizedHttpService } from './authorized-http.service';
 import { 
   Http,
   URLSearchParams,
@@ -16,7 +17,7 @@ export class RequestsService {
   private host: string = 'http://localhost:3004/';
 
   constructor(
-    private http: Http
+    private http: AuthorizedHttpService
   ) { }
 
   prepareQueryParams(queries: Array<any>): URLSearchParams {

@@ -12,14 +12,20 @@ module.exports = (server) => {
 			from = query.start,
 			to = +query.start + +query.count,
 			sort = query.sort,
+			keyword = query.keyword,
 			queryStr = query.query,
 			courses = server.db.getState().courses;
 		console.log(sort);
 		console.log(queryStr);
 
 		courses = courses.filter(course => {
+			let searchQuery = true;
 			let courseDateTime = new Date(course.date).getTime();
-			return courseDateTime >= (currentTime - twoWeeksShiftTime);
+			if (keyword) {
+				keyword = keyword.toLowerCase();
+				searchQuery = course.title.toLowerCase().indexOf(keyword) !== -1;
+			}
+			return courseDateTime >= (currentTime - twoWeeksShiftTime) && searchQuery;
 		})
 		.sort(sortByDate);
 
