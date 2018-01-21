@@ -48,13 +48,7 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        {
-          provide: AuthorizedHttpService,
-          useFactory: (backend: XHRBackend, options: RequestOptions) => {
-            return new AuthorizedHttpService(backend, options);
-          },
-          deps: [XHRBackend, RequestOptions]
-        },
+        AuthorizedHttpService,
         ModalService,
         DatesService,
         RequestsService
