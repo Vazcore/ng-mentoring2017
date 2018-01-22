@@ -6,7 +6,7 @@ import { AppLocalStorage } from '../storage/localStorage';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-const ACTIVE_USER = 'active_user';
+const ACTIVE_USER = 'active_user_token';
 
 @Injectable()
 export class AuthorizedHttpService extends Http  {

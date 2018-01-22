@@ -9,4 +9,4 @@ export class Profile implements ProfileInterface {
   ) {}
 }
 
-export const ACTIVE_USER = 'active_user';
+export const ACTIVE_USER = 'active_user_token';
