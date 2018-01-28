@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, forwardRef } from '@angular/core';
+import { Component, OnInit, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 @Component({
@@ -28,7 +28,7 @@ export class DurationInputComponent implements ControlValueAccessor, OnInit {
   }
 
   set duration(value: number){
-    if (value) {
+    if (value !== this.duration) {
       this._duration = value;
       this.onChange(value);
     }

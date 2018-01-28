@@ -1,4 +1,4 @@
-<form (submit)="proccessForm()" [formGroup]="courseForm" name="courseForm">
+<form (submit)="proccessForm()" [formGroup]="courseForm" name="courseForm" class="form-wrapper">
 	<h5 class="text-center mt-5">{{status[mode]}} Course</h5>
 	<div class="form-group row mt-3">
 		<div class="col-sm-3 label text-right">
@@ -6,6 +6,9 @@
 		</div>
 		<div class="col-sm-8">
 			<input type="text" name="title" class="form-control" formControlName="title" />
+			<div *ngIf="courseForm.get('title')?.invalid && courseForm.get('title')?.dirty">
+				{{courseForm.get('title')?.errors | json}}
+			</div>
 		</div>
 	</div>
 
@@ -15,6 +18,9 @@
 		</div>
 		<div class="col-sm-8">
 			<textarea name="description" class="form-control" formControlName="description"></textarea>
+			<div *ngIf="courseForm.get('description')?.invalid && courseForm.get('description')?.dirty">
+				{{courseForm.get('description')?.errors | json}}
+			</div>
 		</div>
 	</div>
 
@@ -24,6 +30,9 @@
 		</div>
 		<div class="col-sm-8">
 			<app-date-input formControlName="date"></app-date-input>
+			<div *ngIf="courseForm.get('date')?.invalid && courseForm.get('date')?.dirty">
+				{{courseForm.get('date')?.errors | json}}
+			</div>
 		</div>
 	</div>
 
@@ -33,6 +42,9 @@
 		</div>
 		<div class="col-sm-8">
 			<app-duration-input formControlName="duration"></app-duration-input>
+			<div *ngIf="courseForm.get('duration')?.invalid && courseForm.get('duration')?.dirty">
+				{{courseForm.get('duration')?.errors | json}}
+			</div>
 		</div>
 	</div>
 
@@ -41,13 +53,22 @@
 			<label class="d-inline align-middle">Authors</label>
 		</div>
 		<div class="col-sm-8">
-			<app-duration-input formControlName="authors"></app-duration-input>
+			<app-checkbox-list formControlName="authors"
+				[elements]="authors"
+				value="id"
+				primaryLabel="firstName"
+				secondaryLabel="lastName"
+				class="checkbox-list"></app-checkbox-list>
+				<div *ngIf="courseForm.get('authors')?.invalid && courseForm.get('authors')?.dirty">
+					{{courseForm.get('authors')?.errors | json}}
+				</div>
 		</div>
 	</div>
 
 	<div class="form-group row mt-3">
 		<div class="col-sm-8 offset-md-3">
 			<button type="submit"
+				[disabled]="courseForm.invalid === true"
 				class="btn btn-primary w-25 mb-2 float-md-left">{{status[mode]}} course</button>	
 			<button type="button"
 				(click)="cancel()"

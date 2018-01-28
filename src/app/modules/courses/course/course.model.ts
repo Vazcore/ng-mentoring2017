@@ -1,4 +1,5 @@
 import { CourseInterface } from './course.interface';
+import { Author } from '../../authors/author.model';
 
 export class Course implements CourseInterface {
   
@@ -8,6 +9,7 @@ export class Course implements CourseInterface {
     public description: string,
     public date:Date,
     public duration: number,
+    public authors: Array<Author>,
     public topRated?: boolean) {
 
   }

@@ -1,0 +1,26 @@
+@import "../../app.component.less";
+
+
+.custom-holder {
+  height: 300px;
+  overflow-y: scroll;
+  .custom-checkbox-wrapper {
+    background-color: @primaryColor;
+    padding: @margin-xs;
+    margin-bottom: @margin-xs;
+    .custom-control-description {
+      margin-left: @margin-lrg;
+      color: white;
+    }
+  }
+}
+
+:host(.ng-dirty.ng-invalid) {
+  border: none !important;
+  .custom-holder{
+    border: 1px solid red;
+  }
+}
+
+
+

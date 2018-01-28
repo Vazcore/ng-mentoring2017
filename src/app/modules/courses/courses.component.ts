@@ -108,7 +108,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
     return Observable.of(courses)
     .map((courses: Course[]) => {
       return courses.map((course: Course) => {
-        return new Course(course.id, course.title, course.description, new Date(course.date), course.duration, course.topRated);
+        return new Course(course.id, course.title, course.description, new Date(course.date), course.duration, course.authors, course.topRated);
       })
       .filter((course: Course) => {
         return this.getCourseStatus(course) !== OUTDATED_COLOR;  

@@ -32,7 +32,7 @@ export class DateInputComponent implements ControlValueAccessor, OnInit {
   }
 
   set date(newValue: Date) {
-    if (newValue) {
+    if (newValue !== this.date) {
       this._currentDate = newValue;
       this.onChange(newValue);
     }
