@@ -37,6 +37,7 @@ export class LoginService {
   logout(): boolean {
     AppLocalStorage.removeItem(ACTIVE_USER);
     this.activeUser = null;
+    this.token = null;
     this.loginStatus$.next(false);
     return true;
   }

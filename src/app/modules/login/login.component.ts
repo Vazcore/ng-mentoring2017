@@ -4,6 +4,7 @@ import { Profile } from '../profile/profile.model';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/takeLast'; 
 import { Subscribable } from 'rxjs/Observable';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   auth$: Subscription;
   userInfo$: Subscription;
 
-  constructor(private loginSrv: LoginService) { }
+  constructor(
+    private router: Router,
+    private loginSrv: LoginService
+  ) { }
 
   ngOnInit() {
     this.auth$ = this.loginSrv.getLoginStatus()
@@ -50,6 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   logout() {
     this.loginSrv.logout();
+    this.router.navigate(['login']);
   }
 
 }

@@ -16,7 +16,7 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 export class DateInputComponent implements ControlValueAccessor, OnInit {
   onChange = (_) => {};
   onTouched = (_) => {};
-  private _currentDate: Date;
+  private _currentDate: string;
 
   constructor() { }
 
@@ -27,11 +27,11 @@ export class DateInputComponent implements ControlValueAccessor, OnInit {
     this.date = date.target.value;
   }
 
-  get date(): Date {
+  get date(): string {
     return this._currentDate;
   }
 
-  set date(newValue: Date) {
+  set date(newValue: string) {
     if (newValue !== this.date) {
       this._currentDate = newValue;
       this.onChange(newValue);
@@ -40,8 +40,13 @@ export class DateInputComponent implements ControlValueAccessor, OnInit {
 
 
   writeValue(value: any): void {
-    if (this.date !== value) {
-      this.date = value;
+    if (value && this.date !== value) {
+      const date = new Date(value);
+      setTimeout(() => {
+        this.date = `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`;
+      }, 0);
+    } else {
+      this.date = "";
     }
   }
 
