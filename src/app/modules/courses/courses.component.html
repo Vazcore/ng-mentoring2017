@@ -13,8 +13,8 @@
   </div>
 
   <!-- View Courses List -->
-
-  <ul *ngIf="courses.length; else noCourses"
+  <h5 *ngIf="courses.length > 0">Total Shown: {{courses.length}}</h5>
+  <ul *ngIf="courses.length > 0; else noCourses"
     class="list-group w-100 pl-3 pr-3">
     <app-course *ngFor="let course of courses | orderBy : 'date'"
       [course]="course"
@@ -23,6 +23,13 @@
       class="mb-1">
     </app-course>
   </ul>
+
+  <div class="form-group">
+    <button type="button"
+      (click)="nextPage()"
+      [disabled]="noMoreCourses"
+      class="btn btn-success w-100">Show More Courses</button>
+  </div>
 
   <ng-template #noCourses>
     <h5>

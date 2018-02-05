@@ -6,7 +6,6 @@ import {
   LoginPageComponent,
   LoginService } from './index';
 
-
 @NgModule({
   imports: [
     CommonModule,

@@ -5,8 +5,8 @@ export class Profile implements ProfileInterface {
     public id: number,
     public login: string,
     public password: string,
-    public name: string 
+    public name: {first: string, last: string} 
   ) {}
 }
 
-export const ACTIVE_USER = 'active_user';
+export const ACTIVE_USER = 'active_user_token';

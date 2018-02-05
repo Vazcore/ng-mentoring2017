@@ -2,5 +2,5 @@ export interface ProfileInterface {
   id: number;
   login: string;
   password: string;
-  name: string;
+  name: {first: string, last: string};
 }

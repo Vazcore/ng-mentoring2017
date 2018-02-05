@@ -12,9 +12,13 @@ import { OrderByPipe } from './order/order-by.pipe';
 import { FilterByPipe } from './filter/filter-by.pipe';
 import { DateInputComponent } from './date-input/date-input.component';
 import { DurationInputComponent } from './duration-input/duration-input.component';
+import { RequestsService } from './requests/requests.service';
+import { AuthorizedHttpService } from './requests/authorized-http.service';
+import { HttpModule, XHRBackend, RequestOptions } from '@angular/http';
 
 @NgModule({
   imports: [
+    HttpModule,
     CommonModule,
     FormsModule
   ],
@@ -44,8 +48,10 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
+        AuthorizedHttpService,
         ModalService,
-        DatesService
+        DatesService,
+        RequestsService
       ]
     };
   }
