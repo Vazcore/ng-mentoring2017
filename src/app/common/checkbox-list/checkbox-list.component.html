@@ -1,0 +1,13 @@
+<div class="custom-holder">
+  <div *ngFor="let element of elements" class="custom-checkbox-wrapper">
+    <label class="custom-control custom-checkbox">
+      <input type="checkbox"
+        (change)="changeSelectedElement($event, isChecked(element))"
+        [value]="element[value]"
+        [checked]="isChecked(element) === true"
+        class="custom-control-input">
+      <span class="custom-control-indicator"></span>
+      <span class="custom-control-description">{{element[primaryLabel]}} {{element[secondaryLabel]}}</span>
+    </label>
+  </div>
+</div>

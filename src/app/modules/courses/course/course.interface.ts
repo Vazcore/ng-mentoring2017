@@ -1,3 +1,5 @@
+import { Author } from '../../authors/author.model';
+
 export interface CourseInterface {
   id: number;
   title: string;
@@ -5,4 +7,5 @@ export interface CourseInterface {
   date: Date;
   description: string;
   topRated?: boolean;
+  authors: Array<Author>
 }

@@ -9,6 +9,7 @@ import {
   FooterModule,
   LoginModule,
   ProfileModule,
+  AuthorsModule,
   SharedModule
 } from './index';
 
@@ -23,6 +24,7 @@ import {
     FooterModule,
     LoginModule,
     ProfileModule,
+    AuthorsModule,
     SharedModule.forRoot()
   ],
   providers: [],

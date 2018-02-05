@@ -15,6 +15,7 @@ import { DurationInputComponent } from './duration-input/duration-input.componen
 import { RequestsService } from './requests/requests.service';
 import { AuthorizedHttpService } from './requests/authorized-http.service';
 import { HttpModule, XHRBackend, RequestOptions } from '@angular/http';
+import { CheckboxListComponent } from './checkbox-list/checkbox-list.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { HttpModule, XHRBackend, RequestOptions } from '@angular/http';
     OrderByPipe,
     FilterByPipe,
     DateInputComponent,
-    DurationInputComponent
+    DurationInputComponent,
+    CheckboxListComponent
   ],
   exports: [
     SearchBarComponent,
@@ -40,7 +42,8 @@ import { HttpModule, XHRBackend, RequestOptions } from '@angular/http';
     OrderByPipe,
     FilterByPipe,
     DateInputComponent,
-    DurationInputComponent
+    DurationInputComponent,
+    CheckboxListComponent
   ]
 })
 export class SharedModule {
