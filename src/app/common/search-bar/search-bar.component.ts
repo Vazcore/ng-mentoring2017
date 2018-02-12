@@ -11,6 +11,7 @@ import {
 })
 export class SearchBarComponent implements OnInit {
   @Output() onFind: EventEmitter<string> = new EventEmitter<string>();
+  @Output() onClear: EventEmitter<string> = new EventEmitter<string>();
   keyword: string = '';
 
   constructor() { }
@@ -20,7 +21,7 @@ export class SearchBarComponent implements OnInit {
 
   clear(): void {
     this.keyword = '';
-    this.find();
+    this.onClear.emit();
   }
 
   find() {

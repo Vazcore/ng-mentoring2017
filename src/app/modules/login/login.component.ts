@@ -6,6 +6,10 @@ import 'rxjs/add/operator/takeLast';
 import { Subscribable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
+import { Store } from '@ngrx/store';
+import * as actions from './login.actions';
+import * as fromLogin from './login.reducer';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -18,11 +22,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   userInfo$: Subscription;
 
   constructor(
+    private store: Store<fromLogin.State>,
     private router: Router,
     private loginSrv: LoginService
   ) { }
 
   ngOnInit() {
+    this.store.select(fromLogin.selectAll)
+    .subscribe((data: Profile[]) => {
+      this.activeUser = data[0] || false;
+    });
     this.auth$ = this.loginSrv.getLoginStatus()
     .subscribe(isLogin => {
       this.isLogin = isLogin;
@@ -37,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   getUserInfo() {
     this.userInfo$ = this.loginSrv.getActiveProfile()
     .subscribe(user => {
-      this.activeUser = this.loginSrv.setActiveProfile(user);
+      this.store.dispatch(new actions.Login(user));
     });
   }
 
@@ -54,6 +63,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   logout() {
     this.loginSrv.logout();
+    this.store.dispatch(new actions.Logout());
     this.router.navigate(['login']);
   }
 

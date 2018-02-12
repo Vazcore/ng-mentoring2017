@@ -11,6 +11,10 @@ import { PageStatus } from './course-page-status';
 import { ModifyAction } from './course/modify-action.interface';
 import { Paging } from './paging/paging.model';
 
+import { Store } from '@ngrx/store';
+import * as actions from './courses.actions';
+import * as fromCourses from './courses.reducer';
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMap';
@@ -36,6 +40,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   preDeletedCourse: Course;
   editedCourse: Course;
   getCoursesSub: Subscription;
+  getCoursesStateSub: Subscription;
   findCoursesSub: Subscription;
   getCourses$: Subject<String> = new Subject();
   paging$: Subject<Paging> = new Subject();
@@ -46,8 +51,11 @@ export class CoursesComponent implements OnInit, OnDestroy {
   displayingMode$: Subject<'FIND'|'ALL'> = new Subject();
   pageStatus: PageStatus = PageStatus.VIEW_COURSES;
 
+  preCourses: Store<Course[]>;
+
 
   constructor(
+    private store: Store<fromCourses.State>,
     private courseSrv: CourseService,
     private filterByPipe: FilterByPipe,
     private modalService: ModalService,
@@ -55,6 +63,10 @@ export class CoursesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.getCoursesStateSub = this.store.select(fromCourses.selectAll)
+    .subscribe((courses: Course[]) => {
+      this.courses = courses;
+    });
     this.initCourses();
     this.initSearching();
     this.getCourses$.next(null);
@@ -101,7 +113,11 @@ export class CoursesComponent implements OnInit, OnDestroy {
     .switchMap((courses: Course[]) => {
       return this.prepareCourses(courses);
     })
-    .subscribe(this.onLoadingCourses.bind(this));
+    .subscribe((courses: Course[]) => {
+      if (courses.length === 0) {
+        this.noMoreCourses = true;
+      } else this.store.dispatch(new actions.CreateMany(courses));
+    });
   }
 
   prepareCourses(courses: Course[]): Observable<Course[]> {
@@ -120,7 +136,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
     if (courses.length === 0) {
       this.noMoreCourses = true;
     } else {
-      this.courses = [...this.courses, ...courses];
+      this.store.dispatch(new actions.CreateMany(courses));
       this.initialCourses = this.getInitialCourses();
     }
   }
@@ -128,6 +144,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.getCoursesSub.unsubscribe();
     this.findCoursesSub.unsubscribe();
+    this.getCoursesStateSub.unsubscribe();
   }
 
   nextPage():void {
@@ -149,8 +166,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
     this.courseSrv.removeCourse(course.id)
     .subscribe(deleted => {
       this.closeDeleteModal();
-      this.getCourses$.next(null);
-      this.find("");
+      this.store.dispatch(new actions.Delete(course.id));
     });
   }
 
@@ -177,11 +193,17 @@ export class CoursesComponent implements OnInit, OnDestroy {
   }
 
   find(keyword: string) {
-    this.courses = [];
     this.noMoreCourses = false;
+    this.store.dispatch(new actions.ClearAndCreate([]));
     this.displayingMode$.next('FIND');
     this.paging$.next(this.updatePaging(0, this.numberOfCoursesOnPage));
     this.searching$.next(keyword);
+  }
+
+  clear():void {
+    this.noMoreCourses = false;
+    this.displayingMode$.next('ALL');
+    this.store.dispatch(new actions.ClearAndCreate(this.initialCourses));
   }
 
   getCourseStatus(course: Course): string {

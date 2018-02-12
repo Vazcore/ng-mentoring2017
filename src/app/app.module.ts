@@ -4,6 +4,8 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { PagesModule } from './pages/pages.module';
 import { ROUTES } from './app.routes';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './reducers';
 
 import {
   HeaderModule,
@@ -25,7 +27,8 @@ const APP_ROUTER_GUARDS = [
     AppComponent
   ],
   imports: [
-    BrowserModule,    
+    BrowserModule,
+    StoreModule.forRoot(reducers),
     RouterModule.forRoot(ROUTES, {useHash: true}),
     PagesModule,
     HeaderModule,

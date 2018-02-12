@@ -10,6 +10,9 @@ import { Author } from '../../authors/author.model';
 import { Router } from '@angular/router';
 import { CourseService } from '../course.service';
 import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import * as actions from '../courses.actions';
+import * as fromCourses from '../courses.reducer';
 
 @Component({
   selector: 'app-course-form',
@@ -25,6 +28,7 @@ export class CourseFormComponent implements OnInit, OnDestroy {
   authors: Array<Author> = [];
 
   constructor(
+    private store: Store<fromCourses.State>,
     private router: Router,
     private formBuilder: FormBuilder,
     private authorsSrv: AuthorsService,
@@ -76,6 +80,10 @@ export class CourseFormComponent implements OnInit, OnDestroy {
   onProccessorm(observable: Observable<Course>): void {
     this.modifySub = observable
     .subscribe(data => {
+      data.date = new Date(data.date);
+      if (this.mode === 'Edit') this.store.dispatch(new actions.Update(data.id, data));
+      else this.store.dispatch(new actions.Create(data));
+
       this.router.navigate(['courses']);
     });
   }
