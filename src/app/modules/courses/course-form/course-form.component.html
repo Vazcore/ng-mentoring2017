@@ -1,5 +1,5 @@
 <form (submit)="proccessForm()" [formGroup]="courseForm" name="courseForm" class="form-wrapper">
-	<h5 class="text-center mt-5">{{status[mode]}} Course</h5>
+	<h5 class="text-center mt-5">{{mode}} Course</h5>
 	<div class="form-group row mt-3">
 		<div class="col-sm-3 label text-right">
 			<label class="d-inline align-middle">Title</label>
@@ -69,7 +69,7 @@
 		<div class="col-sm-8 offset-md-3">
 			<button type="submit"
 				[disabled]="courseForm.invalid === true"
-				class="btn btn-primary w-25 mb-2 float-md-left">{{status[mode]}} course</button>	
+				class="btn btn-primary w-25 mb-2 float-md-left">{{mode}} course</button>	
 			<button type="button"
 				(click)="cancel()"
 				class="btn btn-default w-25 mb-2 float-md-right">Cancel</button>	

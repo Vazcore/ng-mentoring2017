@@ -1,6 +1,16 @@
 <nav aria-label="breadcrumb" role="navigation">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Courses</li>
+    <li class="breadcrumb-item" aria-current="page" *ngFor="let page of breadCrumbs;let i=index">
+      <a *ngIf="breadCrumbs.length > 1 && i < breadCrumbs.length-1" routerLink="/{{createLink(breadCrumbs)}}">
+        {{page}}
+      </a>
+      <span *ngIf="breadCrumbs.length > 1 && i === breadCrumbs.length-1">
+        {{page}}
+      </span>
+      <span *ngIf="breadCrumbs.length <= 1">
+        {{page}}
+      </span>
+    </li>
   </ol>
 </nav>

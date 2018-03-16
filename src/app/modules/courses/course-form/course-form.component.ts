@@ -7,6 +7,9 @@ import { ArrayValidator } from '../../../common/validators/array.validator';
 import { AuthorsService } from '../../authors/authors.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Author } from '../../authors/author.model';
+import { Router } from '@angular/router';
+import { CourseService } from '../course.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-course-form',
@@ -16,25 +19,31 @@ import { Author } from '../../authors/author.model';
 export class CourseFormComponent implements OnInit, OnDestroy {
 	@Input() course: Course;
 	@Input() mode: string;
-  @Output() changeParentStatus = new EventEmitter<number>();
-	status: string[] = [
-		'', 'Add', 'Edit'
-  ];
   courseForm: FormGroup;
   authorsSub: Subscription;
+  modifySub: Subscription;
   authors: Array<Author> = [];
 
   constructor(
+    private router: Router,
     private formBuilder: FormBuilder,
-    private authorsSrv: AuthorsService
+    private authorsSrv: AuthorsService,
+    private courseSrv: CourseService
   ) { }
 
   ngOnInit() {
     this.setAuthors();
-    if (this.status[this.mode] === 'Add') {
-      this.course = null;
-    }
+    this.createForm();
+  }
 
+  ngOnDestroy() {
+    this.authorsSub.unsubscribe();
+    if (this.modifySub){
+      this.modifySub.unsubscribe();
+    }
+  }
+
+  createForm(): void {
     this.courseForm = this.formBuilder.group(
       {
         title: [this.course ? this.course.title : '', [Validators.required, Validators.maxLength(50)]],
@@ -46,10 +55,6 @@ export class CourseFormComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
-    this.authorsSub.unsubscribe();
-  }
-
   setAuthors(): void {
     this.authorsSub =  this.authorsSrv.getAuthors()
     .subscribe(authors => {
@@ -58,11 +63,25 @@ export class CourseFormComponent implements OnInit, OnDestroy {
   }
 
   proccessForm(): void {
-    this.changeParentStatus.emit(PageStatus.VIEW_COURSES);
+    let course:Course = this.courseForm.value;
+    course.date = new Date(course.date);
+    
+    if (this.mode === 'Edit') {
+      this.onProccessorm(this.courseSrv.updateCourse(this.course.id, course));
+    } else {
+      this.onProccessorm(this.courseSrv.addCourse(course));
+    }
+  }
+
+  onProccessorm(observable: Observable<Course>): void {
+    this.modifySub = observable
+    .subscribe(data => {
+      this.router.navigate(['courses']);
+    });
   }
 
   cancel(): void {
-    this.changeParentStatus.emit(PageStatus.VIEW_COURSES);
+    this.router.navigate(['courses']);
   }
 
 }

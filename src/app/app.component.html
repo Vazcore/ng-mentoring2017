@@ -1,9 +1,10 @@
 <div class="container page-container">
   <app-header logo="assets/aer_lingus_logo.png"></app-header>
 
-  <app-login-page *ngIf="isLogin === false"></app-login-page>
-  <app-courses *ngIf="isLogin === true"></app-courses> 
+  <!-- <app-login-page *ngIf="isLogin === false"></app-login-page>
+  <app-courses *ngIf="isLogin === true"></app-courses>  -->
 
+  <router-outlet></router-outlet>
 </div>
 
 <app-footer></app-footer>

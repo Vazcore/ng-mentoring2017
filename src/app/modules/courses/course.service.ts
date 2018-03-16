@@ -24,6 +24,10 @@ export class CourseService {
     return params;
   }
 
+  getCourse(id: number): Observable<Course> {
+    return this.requetsSrv.request('courses/' + id, 'Get', null, null);
+  }
+
   getCourses(paging: Paging, keyword?: string): Observable<Course[]> {
     const params: Array<QueryParam> = this.formatPaging(paging);
     if (keyword) {
@@ -32,9 +36,12 @@ export class CourseService {
     return this.requetsSrv.request('courses', 'Get', null, params);
   }
 
-  updateCourse(course: Course): boolean {
-    // todo 
-    return true;
+  updateCourse(id: number, course: Course): Observable<Course> {
+    return this.requetsSrv.request('courses/' + id, 'Put', course);
+  }
+
+  addCourse(course: Course): Observable<Course> {
+    return this.requetsSrv.request('courses', 'Post', course);
   }
 
   removeCourse(id: number): Observable<any> {

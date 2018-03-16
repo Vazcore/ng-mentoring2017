@@ -6,8 +6,7 @@
 
     <div class="col-sm-3 pt-2 offset-md-2">
       <button type="button"
-        *ngIf="pageStatus === getPageStatus('VIEW_COURSES')"
-        (click)="changePageStatus('ADD_COURSE')"
+        routerLink="/courses/new"
         class="btn btn-success w-100">Add Course</button>
     </div>
   </div>

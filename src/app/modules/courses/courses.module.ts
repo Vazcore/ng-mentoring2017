@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { 
   CoursesComponent,
@@ -12,6 +13,7 @@ import { CourseFormComponent } from './course-form/course-form.component';
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     SharedModule,
     ReactiveFormsModule
   ],
@@ -20,7 +22,7 @@ import { CourseFormComponent } from './course-form/course-form.component';
     CourseComponent,
     CourseFormComponent
   ],
-  exports: [CoursesComponent],
+  exports: [CoursesComponent, CourseFormComponent],
   providers: [
     CourseService
   ]
